@@ -40,6 +40,32 @@ OAM         = 0x07000000
 
 ROM         = 0x08000000
 
+HEADER_OFFSET_LOGO       = 0x04
+HEADER_OFFSET_TITLE      = 0xA0
+HEADER_OFFSET_GAME_CODE  = 0xAC
+HEADER_OFFSET_MAKER_CODE = 0xB0
+HEADER_OFFSET_MAGIC      = 0xB2
+HEADER_OFFSET_UNIT_CODE  = 0xB3
+HEADER_OFFSET_DEVICE     = 0xB4
+HEADER_OFFSET_SOFT_VER   = 0xBC
+HEADER_OFFSET_CHECKSUM   = 0xBD
+
+ROM_HEADER_LOGO       = ROM + HEADER_OFFSET_LOGO
+ROM_HEADER_TITLE      = ROM + HEADER_OFFSET_TITLE
+ROM_HEADER_GAME_CODE  = ROM + HEADER_OFFSET_GAME_CODE
+ROM_HEADER_MAKER_CODE = ROM + HEADER_OFFSET_MAKER_CODE
+ROM_HEADER_MAGIC      = ROM + HEADER_OFFSET_MAGIC
+ROM_HEADER_UNIT_CODE  = ROM + HEADER_OFFSET_UNIT_CODE
+ROM_HEADER_DEVICE     = ROM + HEADER_OFFSET_DEVICE
+ROM_HEADER_SOFT_VER   = ROM + HEADER_OFFSET_SOFT_VER
+ROM_HEADER_CHECKSUM   = ROM + HEADER_OFFSET_CHECKSUM
+
+GPIOPortData          = ROM + 0xC4
+GPIOPortDirection     = ROM + 0xC6
+GPIOPortReadEnable    = ROM + 0xC8
+
+BIOS_END = 0x4000
+
 @-------------------------------------------------------------------------------
 @ I/O Register Offsets
 @-------------------------------------------------------------------------------
@@ -231,6 +257,8 @@ REG_OFFSET_IF           = 0x202
 
 REG_OFFSET_WAITCNT      = 0x204
 
+REG_OFFSET_POSTFLG      = 0x300
+REG_OFFSET_HALTCNT      = 0x301
 
 @-------------------------------------------------------------------------------
 @ I/O Register Addresses
@@ -423,9 +451,33 @@ REG_IF           = (REG_BASE + REG_OFFSET_IF)
 
 REG_WAITCNT      = (REG_BASE + REG_OFFSET_WAITCNT)
 
+REG_POSTFLG      = (REG_BASE + REG_OFFSET_POSTFLG)
+REG_HALTCNT      = (REG_BASE + REG_OFFSET_HALTCNT)
+
 @-------------------------------------------------------------------------------
 @ I/O Register Flags
 @-------------------------------------------------------------------------------
+
+@ DISPCNT
+DISPCNT_MODE_0          = 0x0000 @ BG0: text, BG1: text, BG2: text,   BG3: text
+DISPCNT_MODE_1          = 0x0001 @ BG0: text, BG1: text, BG2: affine, BG3: off
+DISPCNT_MODE_2          = 0x0002 @ BG0: off,  BG1: off,  BG2: affine, BG3: affine
+DISPCNT_MODE_3          = 0x0003 @ Bitmap mode, 240x160, BGR555 color
+DISPCNT_MODE_4          = 0x0004 @ Bitmap mode, 240x160, 256 color palette
+DISPCNT_MODE_5          = 0x0005 @ Bitmap mode, 160x128, BGR555 color
+DISPCNT_CGB_MODE        = 0x0008 @ Enable CGB mode
+DISPCNT_HBLANK_INTERVAL = 0x0020 @ Allow access to OAM during H-Blank
+DISPCNT_OBJ_1D_MAP      = 0x0040
+DISPCNT_FORCED_BLANK    = 0x0080
+DISPCNT_BG0_ON          = 0x0100
+DISPCNT_BG1_ON          = 0x0200
+DISPCNT_BG2_ON          = 0x0400
+DISPCNT_BG3_ON          = 0x0800
+DISPCNT_BG_ALL_ON       = 0x0F00
+DISPCNT_OBJ_ON          = 0x1000
+DISPCNT_WIN0_ON         = 0x2000
+DISPCNT_WIN1_ON         = 0x4000
+DISPCNT_OBJWIN_ON       = 0x8000
 
 @ DMA
 DMA_DEST_INC      = 0x0000
